@@ -16,13 +16,29 @@ public class CollisionHandler : MonoBehaviour
     AudioSource audioSource;
 
     bool isTransitioning = false;
+    bool collisionDisabled = false;
 
     void Start() {
         audioSource = GetComponent<AudioSource>(); 
     }
 
+    void Update() {
+        RespondToDebugKeys();
+    }
+
+    void RespondToDebugKeys() {
+        if(Input.GetKeyDown(KeyCode.L)){
+            LoadNextLevel();
+        }
+        else if(Input.GetKeyDown(KeyCode.C)){
+             collisionDisabled = !collisionDisabled;
+        }
+    }
+
 
     void OnCollisionEnter(Collision other) {
+        if(isTransitioning || collisionDisabled ){ return; }
+
         if(isTransitioning == false) {
             switch(other.gameObject.tag) {
                 case "Friendly" :
